@@ -3,7 +3,7 @@ $ScriptDir  = $PSScriptRoot
 $ConfigFile = Join-Path $ScriptDir "servers.json"
 $LogFolder  = Join-Path $ScriptDir "logs"
 $LogFile    = Join-Path $LogFolder "manager.log"
-$Version    = "1.5.4"
+$Version    = "1.5.1"
 $DevTeam    = "Rlverflow"
 $Socials    = "github.com/Rlverflow"
 
