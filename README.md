@@ -1,57 +1,115 @@
-# ps-ssh-manager
-A robust, lightweight, and "idiot-safe" PowerShell-based SSH connection manager. Built for developers who switch between Linux based OS and Windows environments and need a reliable way to keep their rigs organized.
-# Features
-*Cross-Platform Support: Dedicated tagging for Windows [W] and Linux [L] machines.
+# 💻 ssh-manager
 
-*Collision-Proof: Uses unique GUIDs for every server entry—no more bugs when deleting servers with duplicate names.
+A robust, lightweight, and **idiot-safe** cross-platform SSH connection manager. Built for developers and sysadmins who move between **Linux**, **Windows**, and **BSD** environments and need a reliable, portable way to keep their servers organized.
 
-*Bulletproof Logic: Sanitized inputs (no accidental space bugs) and strict error handling.
+---
 
-*Session Security: Integrated connection timeouts to prevent the script from hanging on dead hosts.
+## 🌟 Features
 
-*Automatic Logging: Tracks every connection attempt, addition, and removal in .\logs\manager.log.
+* **Cross-Platform Tagging:** Dedicated OS identifiers for Windows `[W]`, Linux `[L]`, and BSD `[B]` targets.
+* **Multi-Shell Native:** Native implementations for **PowerShell**, **Bash**, and POSIX **`sh`** (for minimal BSD/Linux environments without Bash pre-installed).
+* **Collision-Proof Storage:** Uses unique GUIDs for every server entry—no name-collision bugs when deleting duplicate hosts.
+* **Bulletproof Logic:** Sanitized inputs (no whitespace or parsing errors) paired with strict error handling.
+* **Session Security:** Integrated connection timeouts prevent script hangs on dead or unreachable hosts.
+* **Automatic Audit Logging:** Tracks every connection attempt, addition, and removal in `logs/manager.log`.
+* **Zero-Dependency Portability:** Everything is stored in a simple `servers.json` file. Move the directory, and your configuration moves with you.
 
-*Portable: Everything is stored in a simple servers.json file. Move the folder, and your config stays with you.
+---
 
-#🛠️ Installation
-1-Clone the repository:
-<img width="551" height="75" alt="image" src="https://github.com/user-attachments/assets/1863bd52-6e6c-4308-a3e5-6798a7c2937a" />
-2-Set Execution Policy (if needed):
+## 🛠️ Installation
 
-If PowerShell blocks the script, run:
-<img width="599" height="39" alt="image" src="https://github.com/user-attachments/assets/4951283c-36b1-467e-95e0-bdb1f6f8de4f" />
-3-Run the Manager:
-<img width="702" height="59" alt="image" src="https://github.com/user-attachments/assets/739813f0-ec2f-4c26-9f62-04b2ecfb000c" />
+### 1. Clone the Repository
 
-# 🖥️ Usage
-1-Number (1-N)	:  Initiates an SSH session to the corresponding server.
+```bash
+git clone https://github.com/Rlverflow/ssh-manager.git
+cd ssh-manager
+```
 
-2-[a] Add	      :  Interactive wizard to add a new rig (Nickname, IP, User, OS).
+### 2. Set Execution Policy (Windows PowerShell)
 
-3-[r] Remove	  :  Safely delete a server from your list by its index.
+If PowerShell restricts script execution on Windows, run:
 
-4-[l] Logs	    :  View the last 20 lines of activity.
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
 
-5-[v] Info	    :  View version and developer details.
+### 3. Run the Manager
 
-6-[q] Quit	      :  Safely exit the manager.
+#### Windows (PowerShell)
 
-# ⚙️ Target Machine Setup
+```powershell
+.\ssh-manager.ps1
+```
 
-To ensure you can connect to your machines, make sure SSH is enabled on the target:
+#### Linux & BSD (Bash)
 
-For Linux:
+```bash
+chmod +x ssh-manager.sh
+./ssh-manager.sh
+```
 
-<img width="463" height="72" alt="image" src="https://github.com/user-attachments/assets/42cc37ab-6fee-45ff-adfd-8468fc848c4b" />
+#### BSD & Minimal Linux (POSIX `sh`)
 
-for windows:
+```sh
+chmod +x ssh-manager.sh
+./ssh-manager.sh
+```
 
-Run Powershell as Administrator:
+---
 
-<img width="548" height="82" alt="image" src="https://github.com/user-attachments/assets/9036aa4a-da90-45a0-885c-a21f4b271754" />
+## 🖥️ Usage
 
-# 🛡️ Stability Status: V1.5.4 (Stable)
+When launched, `ssh-manager` opens an interactive console interface:
 
-This version has been "Sunday Roasted"—tested for input errors, parser bugs, and network timeouts.
+| Option | Command | Description |
+| :---: | :--- | :--- |
+| **`1-N`** | Connect | Initiates an SSH session to the corresponding server index |
+| **`a`** | Add | Interactive wizard to add a new rig (Nickname, IP, User, OS) |
+| **`r`** | Remove | Safely delete a server entry by its index |
+| **`l`** | Logs | View the last 20 lines of connection activity |
+| **`v`** | Info | Display version information and developer details |
+| **`q`** | Quit | Safely exit the manager |
 
-Developed by Rlverflow
+---
+
+## ⚙️ Target Machine Setup
+
+Ensure SSH service is enabled on target host machines prior to connecting:
+
+### 🐧 Linux
+
+```bash
+sudo systemctl enable --now sshd
+```
+
+### 😈 BSD (FreeBSD / NetBSD / OpenBSD)
+
+```sh
+# FreeBSD
+sysrc sshd_enable="YES"
+service sshd start
+
+# NetBSD
+echo 'sshd=YES' >> /etc/rc.conf
+/etc/rc.d/sshd start
+
+# OpenBSD (enabled by default)
+rcctl enable sshd
+rcctl start sshd
+```
+
+### 🪟 Windows (Run PowerShell as Administrator)
+
+```powershell
+Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0
+Start-Service sshd
+Set-Service -Name sshd -StartupType 'Automatic'
+```
+
+---
+
+## 🛡️ Stability Status: `v1.5.6` (Stable)
+
+This release has been thoroughly tested for input edge cases, JSON parsing integrity, network timeout recovery, and feature parity across Bash, POSIX `sh`, and PowerShell execution environments.
+
+**Developer:** [Rlverflow](https://github.com/Rlverflow)
